@@ -16,6 +16,7 @@ import (
 	"syscall"
 	"time"
 
+	git "github.com/go-git/go-git/v5"
 	"k8s.io/klog/v2"
 )
 
@@ -300,7 +301,12 @@ func (r *repository) CloneWithOptions(location string, url string, args ...strin
 		}
 	}
 
-	_, _, err := r.git("", gitArgs...)
+	// _, _, err := r.git("", gitArgs...)
+	_, err := git.PlainClone(location, false, &git.CloneOptions{
+		URL:               url,
+		RecurseSubmodules: true,
+		Depth:             1,
+	})
 	return err
 }
 
